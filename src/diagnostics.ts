@@ -18,7 +18,7 @@ export function computeFindings(document: vscode.TextDocument): Finding[] {
 
 	if (isRealEnvFile(document.uri.fsPath)) {
 		findings.push(...scanEnvFile(text));
-	} else {
+	} else if (!disabledPatterns.has('undefined-env-var')) {
 		for (const usage of scanEnvUsage(text)) {
 			if (isEnvVarDefined(usage.name)) {
 				continue;

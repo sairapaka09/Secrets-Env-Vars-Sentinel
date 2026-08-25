@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { isRealEnvFile } from './envScanner';
 
 let definedVars = new Set<string>();
 
@@ -36,11 +35,10 @@ export async function refreshEnvRegistry(): Promise<void> {
 	const next = new Set<string>();
 	const exclude = '**/{node_modules,.git,.terraform}/**';
 
+	// Include .env.example/.sample/etc. too: real .env files are normally gitignored,
+	// so example files are often the only place env var names are documented.
 	const envFiles = await vscode.workspace.findFiles('**/{.env*,*.env,*.env.*}', exclude);
 	for (const uri of envFiles) {
-		if (!isRealEnvFile(uri.fsPath)) {
-			continue;
-		}
 		try {
 			const bytes = await vscode.workspace.fs.readFile(uri);
 			const text = Buffer.from(bytes).toString('utf8');
