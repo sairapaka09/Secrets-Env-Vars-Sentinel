@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.3]
+
+- Findings no longer fire inside comments (`//`, `#`, `/* */`, `<!-- -->`, and Python triple-quoted
+  blocks), so commented-out code and example snippets are ignored.
+- Env var usages that already provide a fallback default (e.g. `os.getenv("NAME", default)`,
+  `os.environ.get("NAME", default)`, `process.env.NAME || default`) no longer trigger the
+  `undefined-env-var` check, since the code already handles a missing value gracefully.
+
 ## [0.0.2]
 
 - Fixed false positives in undefined environment variable detection: variable names

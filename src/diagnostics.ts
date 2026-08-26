@@ -20,7 +20,8 @@ export function computeFindings(document: vscode.TextDocument): Finding[] {
 		findings.push(...scanEnvFile(text));
 	} else if (!disabledPatterns.has('undefined-env-var')) {
 		for (const usage of scanEnvUsage(text)) {
-			if (isEnvVarDefined(usage.name)) {
+			// A fallback value means the code already handles a missing var gracefully.
+			if (usage.hasDefault || isEnvVarDefined(usage.name)) {
 				continue;
 			}
 			findings.push({

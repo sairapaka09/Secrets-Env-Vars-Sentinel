@@ -44,6 +44,26 @@ suite('scanText', () => {
 		const findings = scanText('{\n  "Password": "123"\n}');
 		assert.strictEqual(findings.some(f => f.patternId === 'hardcoded-credential'), true);
 	});
+
+	test('ignores secrets inside single-line comments', () => {
+		const findings = scanText('// const key = "AKIAIOSFODNN7EXAMPLE";');
+		assert.strictEqual(findings.length, 0);
+	});
+
+	test('ignores secrets inside Python-style comments', () => {
+		const findings = scanText('# token: ghp_1234567890abcdefghijklmnopqrstuvwxyz12');
+		assert.strictEqual(findings.length, 0);
+	});
+
+	test('ignores secrets inside block comments', () => {
+		const findings = scanText('/* const key = "AKIAIOSFODNN7EXAMPLE"; */');
+		assert.strictEqual(findings.length, 0);
+	});
+
+	test('still detects secrets on lines with a trailing comment', () => {
+		const findings = scanText('const key = "AKIAIOSFODNN7EXAMPLE"; // real key, rotate it');
+		assert.strictEqual(findings.length, 1);
+	});
 });
 
 suite('scanPolicy', () => {

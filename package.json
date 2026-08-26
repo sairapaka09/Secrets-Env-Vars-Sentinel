@@ -2,7 +2,7 @@
   "name": "secrets-env-scanner",
   "displayName": "Secret & Env Sentinel",
   "description": "Scan your codebase for secrets, API keys, and exposed environment variables",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "sairapaka",
   "license": "MIT",
   "icon": "resources/icon.png",

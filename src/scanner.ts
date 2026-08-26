@@ -1,4 +1,5 @@
 import { secretPatterns } from './patterns';
+import { maskComments } from './commentMask';
 
 export interface Finding {
 	patternId: string;
@@ -25,7 +26,7 @@ function redact(value: string): string {
  */
 export function scanText(text: string, disabledPatterns?: Set<string>): Finding[] {
 	const findings: Finding[] = [];
-	const lines = text.split(/\r\n|\r|\n/);
+	const lines = maskComments(text).split(/\r\n|\r|\n/);
 
 	for (const pattern of secretPatterns) {
 		if (disabledPatterns?.has(pattern.id)) {
